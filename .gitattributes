@@ -1,0 +1,5 @@
+# Copies of files from other repositories, and data: keep their bytes
+tests/fixtures/** -text
+*.csv -text
+*.mat binary
+*.png binary

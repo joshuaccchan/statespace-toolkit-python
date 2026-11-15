@@ -1,0 +1,17 @@
+1dcb1dbd24e760f8305896d50804cb65  src/bvar_toolkit/_linalg.py
+4c6e0c94059c91d979890813f46143d4  src/bvar_toolkit/_rng.py
+d4ba6d4aa847f846b06194b896894cf4  src/bvar_toolkit/_struct.py
+0e930252ea81994b26ce0028906200f6  src/bvar_toolkit/diag/_geweke.py
+91917d3238c881af3db8404006c4272d  src/bvar_toolkit/diag/_inefficiency_factor.py
+648f861778900ea14ef0f86e72c4d53e  src/bvar_toolkit/diag/_mcse.py
+b8b597cf4f3c4203ab10092125689439  src/bvar_toolkit/diag/_specvar0.py
+3361dc1e78f7e5b46a5a59a93117931e  src/bvar_toolkit/sv/_ksc_ar1_mean.py
+238f1c69c107db5ebd9bfb5ccda8f59a  src/bvar_toolkit/sv/_ksc_rw_diffuse.py
+0c04c5ddacf4e05921d7f997bed16994  src/bvar_toolkit/sv/_ksc_rw_h0.py
+78cb05356f67ff6c6bc62dab89de83c1  src/bvar_toolkit/sv/_nu_studentt.py
+f7dc5b5caa3bb3f76017093270e96816  src/bvar_toolkit/sv/_sv_params.py
+499cc62437faffdc504f1e3e214f42d8  src/bvar_toolkit/util/_diffmat.py
+54122f178ccd2439c3e7c9f013a1958c  src/bvar_toolkit/util/_select_obs.py
+a0fd9eab9ed83c9093062e0c01ee6d79  src/bvar_toolkit/util/_shaded_band.py
+b23ac63a6da6c0a7488c6e44ba2ff14d  src/bvar_toolkit/util/_surform.py
+a4d126fd85eb903e909fc454984193d9  src/bvar_toolkit/util/_tnormrnd.py

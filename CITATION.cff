@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+title: "statespace-toolkit for Python: Python code for Bayesian state space models"
+message: >-
+  If you use this software, please cite both the paper whose method you use
+  (see CITING.md in statespace-toolkit) and this software record.
+type: software
+authors:
+  - family-names: Chan
+    given-names: Joshua C. C.
+    orcid: "https://orcid.org/0000-0003-3632-128X"
+    affiliation: Purdue University
+repository-code: "https://github.com/joshuaccchan/statespace-toolkit-python"
+abstract: >-
+  Python code for Bayesian state space models, the Python version of the MATLAB
+  library statespace-toolkit. It implements the precision sampler of Chan and
+  Jeliazkov (2009), which draws the whole path of the states at once, with the
+  samplers built on it for unobserved components, time-varying parameter and
+  stochastic volatility models. The functions keep their MATLAB names and
+  arguments, and tests check each one against test cases exported from the
+  MATLAB library, including draws made from a stream of random numbers shared by
+  the two languages.
+keywords:
+  - Bayesian econometrics
+  - state space models
+  - precision sampler
+  - stochastic volatility
+  - Markov chain Monte Carlo
+  - Python
+license: MIT
