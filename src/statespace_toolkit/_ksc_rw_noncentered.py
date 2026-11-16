@@ -29,9 +29,6 @@ def ksc_rw_noncentered(Ystar, htilde, h0, omegah, b0, Vh0, Vh, Vomegah, rng=None
       2018). rng is None, an integer seed, a numpy.random.Generator or a ssm.Stream. Random
       numbers per call: rand(T), randn(T), randn(2), rand.
 
-    The posterior means of htilde and of (h0, omegah) are solved with the Cholesky factor that
-    the draw uses.
-
     See:
     Chan, J.C.C. (2027). Bayesian Macroeconometrics: Methods and Applications, Chapman &
     Hall/CRC, Section 10.1.1.

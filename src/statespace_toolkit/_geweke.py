@@ -21,8 +21,8 @@ def geweke(draws, a=0.10, b=0.50, L='auto'):
               and West (1994)
       Z     : k-vector, approximately standard normal if the chain is stationary
       pval  : k-vector of two-sided p-values
-      info  : Struct with the segments A and B (row indices of draws, counted from 0), their lags
-              LA and LB, and a and b
+      info  : the segments A and B (row indices of draws, counted from 0), their lags LA and
+              LB, and a and b
 
     The long-run variances are estimated by ssm.specvar0. Code-identical to
     bvar_toolkit.diag.geweke of the Python bvar-toolkit, and the two must stay so. For a textbook

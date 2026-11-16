@@ -13,11 +13,10 @@ def select_obs(Y):
       Sm : Tn x Nm sparse selection matrix (csc_array) for the missing values
       yo : No-vector of observed values, ordered as So takes them
 
-    y = (y_1', ..., y_T')' = Y.ravel() stacks the n variables within each period, and yo and ym
-    follow that order, so the precision of ym given yo is banded whenever the precision of y is.
-    [So, Sm] is a permutation matrix, so Sm.T @ y recovers the missing values of a completed y. An
-    all-observed or all-missing pattern gives the corresponding matrix Tn x 0. Code-identical to
-    bvar_toolkit.util.select_obs of the Python bvar-toolkit, and the two must stay so.
+    y = (y_1', ..., y_T')' stacks the n variables within each period, and yo and ym follow that
+    order, so the precision of ym given yo is banded whenever the precision of y is. [So, Sm] is a
+    permutation matrix, so Sm.T @ y recovers the missing values of a completed y. An all-observed
+    or all-missing pattern gives the corresponding matrix Tn x 0. Written for this toolkit.
 
     See:
     Chan, J.C.C., Poon, A. and Zhu, D. (2023). High-Dimensional Conditionally Gaussian State Space

@@ -181,6 +181,19 @@ qs = (0:91:91*3)';  qe = qs + 91;
 fx.midas_basis = {run_case(@ssm.midas_basis, {dw, xw, qs, qe}, 3), ...
     run_case(@ssm.midas_basis, {dw, xw, qs, qe}, 3, struct('scale', 'sum')), ...
     run_case(@ssm.midas_basis, {dw, xw, qs, qe}, 3, struct('release', dw + 7))};
+
+    % a constant coefficient last among the states, so that K is banded apart from a dense last
+    % row: the precision sampler and the integrated likelihood
+rng(10, 'twister');
+Tc = 120;
+xc = randn(Tc, 1);
+Gc = ssm.diffmat(Tc + 1);
+Zc = [sparse(Tc, 1) speye(Tc) sparse(xc)];
+Pc = blkdiag(Gc'*spdiags([.01; 200*ones(Tc, 1)], 0, Tc + 1, Tc + 1)*Gc, .01);
+yc = 2 + cumsum(.1*randn(Tc, 1)) + xc + randn(Tc, 1);
+Kc = Pc + Zc'*Zc;
+fx.simulate_states{end+1} = replay_case(36, @ssm.simulate_states, {Kc, Zc'*yc, 3}, 3);
+fx.intlike{end+1} = run_case(@ssm.intlike, {yc, Zc, speye(Tc), Pc, zeros(Tc + 2, 1)}, 3);
 end
 
 function [logf, gradK] = sv_target(s2, muh, phih, omegah2)

@@ -2,9 +2,18 @@ import numpy as np
 import scipy.sparse as sp
 from scipy.sparse.linalg import spsolve
 
+from ._chol import chol
+
 
 def _step(K, g):
-    """K^{-1} g for a sparse or dense square K; NaN where the solve fails"""
+    """K^{-1} g for a sparse or dense square K: by its Cholesky factor when K is positive
+    definite, as for a concave log density, and by a general solve otherwise; NaN where the
+    solve fails"""
+    try:
+        C = chol(K)
+        return C.solve_t(C.solve(g))
+    except (np.linalg.LinAlgError, ValueError):
+        pass
     try:
         if sp.issparse(K):
             return np.asarray(spsolve(sp.csc_array(K), g), dtype=float).ravel()
@@ -18,7 +27,7 @@ def mode_newton(alpha0, gradK, tol=1e-4, max_iter=100):
     with the banded negative Hessian. See Chan (2027), Section 10.2.2.
 
       alphahat, K, iter = ssm.mode_newton(alpha0, gradK)
-      alphahat, K, iter = ssm.mode_newton(alpha0, gradK, tol, max_iter)
+      alphahat, K, iter = ssm.mode_newton(alpha0, gradK, tol=tol, max_iter=m)
 
       alpha0   : n-vector, the starting point
       gradK    : function; g, K = gradK(alpha) returns the gradient g of the log density at

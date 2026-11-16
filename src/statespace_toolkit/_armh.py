@@ -1,6 +1,6 @@
 import numpy as np
 
-from ._linalg import BandChol
+from ._chol import chol
 from ._mode_newton import mode_newton
 from ._rng import as_rng
 
@@ -32,8 +32,7 @@ def armh(alpha, logf, gradK, c_reject=3, force_accept=False, start=None, tol=1e-
 
     The proposal is g = N(alphahat, K^{-1}) at the mode alphahat. Candidates from g are kept
     with probability min{f/(c g), 1}, and the survivor passes an MH step. For a textbook
-    discussion, see Chan (2027), Sections 6.2.3, 10.2.2 and 10.3.3. Random numbers per
-    candidate: randn(n), then rand; then rand for the MH step. Written for this toolkit.
+    discussion, see Chan (2027), Sections 6.2.3, 10.2.2 and 10.3.3. Written for this toolkit.
 
     See:
     Chan, J.C.C. (2027). Bayesian Macroeconometrics: Methods and Applications, Chapman &
@@ -56,7 +55,7 @@ def armh(alpha, logf, gradK, c_reject=3, force_accept=False, start=None, tol=1e-
     alpha = np.array(alpha, dtype=float).ravel()
     start = alpha if start is None else np.asarray(start, dtype=float).ravel()
     ahat, K, _ = mode_newton(start, gradK, tol, max_iter_mode)
-    C = BandChol(K)
+    C = chol(K)
     logc = np.log(c_reject) + logf(ahat)        # log c; the kernel of g is 1 at ahat
     n = alpha.size
 

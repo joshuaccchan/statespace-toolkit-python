@@ -13,15 +13,17 @@ functions. Each Python output must equal MATLAB's within 1e-10 of the entry plus
 largest entry, and a function that draws must use as many uniforms. Measured, the outputs agree
 within 7.2e-14 of the largest entry, and matrices built without arithmetic are identical.
 
-Checks without MATLAB compare `ssm.simulate_states` with dense algebra and 20,000 draws,
-`ssm.intlike` with the Kalman filter, `ssm.intlike_sv` and `ssm.intlike_sv_t` with the exact
-likelihood by quadrature at T = 2, `ssm.restrict` with dense Gaussian conditioning, and
-`ssm.armh` with a Gaussian target, whose draws it must reproduce. A chain of `ssm.ma_params`
-must match the conditional density of psi on a grid.
+Checks without MATLAB compare `ssm.simulate_states` with dense algebra and 20,000 draws, the
+factor of the precision samplers with the dense Cholesky factor, `ssm.intlike` with the Kalman
+filter, `ssm.intlike_sv` and `ssm.intlike_sv_t` with the exact likelihood by quadrature at
+T = 2, `ssm.restrict` with dense Gaussian conditioning, and `ssm.armh` with a Gaussian target,
+whose draws it must reproduce. A chain of `ssm.ma_params` must match the conditional density of
+psi on a grid.
 
-Of 28 one-line changes to the functions, most by 1e-9, the tests catch 25. The three they miss
-change terms too small to move the output beyond the tolerance; a change of 1e-9 to the leading
-term of the same three functions is caught.
+Of 38 one-line changes to the functions and to their factor, most by 1e-9, the tests catch 34.
+Three of the four they miss change terms too small to move the output beyond the tolerance; a
+change of 1e-9 to the leading term of the same three functions is caught. The fourth changes
+the upper triangle of a matrix whose Cholesky factor NumPy computes from the lower triangle.
 
 The 14 functions shared with the
 [Python bvar-toolkit](https://github.com/joshuaccchan/bvar-toolkit-python) keep its code, as
@@ -33,8 +35,8 @@ file pinned in `tests/fixtures`, apart from the docstring and the depth of its i
 
 | Function | Shared with the Python bvar-toolkit | Cases from MATLAB | Other checks |
 |---|---|---|---|
-| `ssm.simulate_states` | | 5, replayed | dense algebra; 20,000 draws |
-| `ssm.intlike` | | 3 | Kalman filter |
+| `ssm.simulate_states` | | 6, replayed | dense algebra; 20,000 draws |
+| `ssm.intlike` | | 4 | Kalman filter; dense algebra |
 | `ssm.restrict` | | 2 | dense conditioning |
 | `ssm.lagpolymat` | | 5 | `ssm.diffmat`; linear filter; input errors |
 | `ssm.mode_newton` | | 3 | a Gaussian target; the number of steps; errors |
@@ -74,12 +76,15 @@ Not yet ported: the five `ssm.models` functions.
 - Invalid input raises `ValueError`; non-convergence and steps that return NaN or Inf raise
   `RuntimeError`. The messages are MATLAB's.
 - `ssm.simulate_states` returns all three outputs. Without `ndraws` it returns one draw as a
-  vector; with `ndraws` it returns an n x ndraws array. Its factor `C` is a `ssm.BandChol`, which
-  holds the band of the factor and solves with it, and `ssm.restrict` takes it.
+  vector; with `ndraws` it returns an n x ndraws array. Its factor `C` holds the Cholesky
+  factor of K and solves with it. For a banded K it is a `ssm.BandChol`. When the last states
+  enter every period, as constant coefficients do, it keeps the band of the leading block and
+  the trailing rows dense, which gives the factor of MATLAB's sparse `chol`. `ssm.restrict`
+  takes either. The band comes from the nonzero values of K, so a zero that SciPy stores
+  explicitly does not widen it.
 - `ssm.midas_basis` takes dates as numpy datetime64 values or as numbers of days.
 
 ## Guides
 
 A Python guide draws its own NumPy random numbers, so its page carries the numbers of its Python
-run. On `uc_states`, the counts of the coverage check and the bounds of the comparisons differ
-from the MATLAB page; the interval widths, 2.40 and 1.10, are the same.
+run.

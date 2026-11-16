@@ -1,12 +1,9 @@
 """guide - the code of guides/uc_states/README.md: the trend of a local level model drawn by the
 precision sampler, given the parameters, on generated data; then the same with a persistent
-transitory component, and with a known variance that changes over time. The sections called
-"the code to adapt" are all a sampler needs. The sections called "the checks" form K^{-1} and
-other dense matrices, which only a small example can afford.
-
-Saves fig_spy.png, fig_level.png and fig_ar1.png next to this file.
-
-Usage, from the root of the repository:  python guides/uc_states/guide.py
+transitory component, and with a known variance that changes over time. The sections called "the
+code to adapt" are all a sampler needs. The sections called "the checks" form K^{-1} and other
+dense matrices, which only a small example can afford. Saves fig_spy.png, fig_level.png and
+fig_ar1.png next to this file.
 """
 
 import os
@@ -24,7 +21,7 @@ from scipy.signal import lfilter  # noqa: E402
 import statespace_toolkit as ssm  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-rng = np.random.default_rng(1)
+rng = np.random.default_rng(3)
 
 
 def rel(a, b):

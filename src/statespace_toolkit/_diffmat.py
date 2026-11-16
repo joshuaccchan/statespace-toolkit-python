@@ -19,8 +19,8 @@ def diffmat(T, a=1.0):
       AR(1) / random-walk state:  H_rho  = I - rho*L   ->  diffmat(T, rho)
       MA(1) error transform:      H_psi  = I + psi*L   ->  diffmat(T, -psi)
 
-    Code-identical to bvar_toolkit.util.diffmat of the Python bvar-toolkit, and the two must stay
-    so.
+    Written for bvar-toolkit, and code-identical to bvar_toolkit.util.diffmat of the Python
+    bvar-toolkit; the two must stay so.
 
     See:
     Chan, J.C.C. (2027). Bayesian Macroeconometrics: Methods and Applications, Chapman &

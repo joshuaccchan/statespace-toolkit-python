@@ -1,6 +1,6 @@
 import numpy as np
 
-from ._linalg import BandChol
+from ._chol import chol
 
 
 def intlike(y, Z, iR, P, b):
@@ -12,7 +12,7 @@ def intlike(y, Z, iR, P, b):
 
       y        : Tn-vector of stacked observations, net of any part not involving the states,
                  with y = Z @ alpha + e and e ~ N(0, R)
-      Z        : Tn x Tm matrix loading the stacked states alpha, sparse or dense
+      Z        : Tn x Tm matrix loading the stacked states alpha
       iR       : Tn x Tn precision inv(R), sparse (diagonal or banded)
       P, b     : Tm x Tm prior precision and Tm-vector prior mean of alpha implied by the
                  transition equation G @ alpha = btilde + eta, eta ~ N(0, Q):
@@ -40,10 +40,10 @@ def intlike(y, Z, iR, P, b):
     if tuple(iR.shape) != (Tn, Tn):
         raise ValueError(f'iR must be {Tn} x {Tn}, the size of y')
     K = P + Z.T @ iR @ Z
-    CK = BandChol(K)
+    CK = chol(K)
     alphahat = CK.solve_t(CK.solve(P @ b + Z.T @ (iR @ y)))
     r = y - Z @ alphahat
     d = alphahat - b
-    ll = (-Tn / 2 * np.log(2 * np.pi) + BandChol(iR).logdet() / 2 + BandChol(P).logdet() / 2
+    ll = (-Tn / 2 * np.log(2 * np.pi) + chol(iR).logdet() / 2 + chol(P).logdet() / 2
           - CK.logdet() / 2 - .5 * (r @ (iR @ r) + d @ (P @ d)))
     return ll, alphahat, K

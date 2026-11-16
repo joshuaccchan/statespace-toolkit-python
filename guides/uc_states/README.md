@@ -193,7 +193,7 @@ draws, tauhat, _ = ssm.simulate_states(K, c, 5000, rng=rng)
 
 $`\mathbf{K}`$ is still tridiagonal. With $`\rho = 0.8`$, the trend is harder to tell apart from
 the persistent transitory component, and its 90 percent intervals are more than twice as wide,
-2.40 on average against 1.10 with a serially uncorrelated transitory component (Figure 3).
+2.39 on average against 1.10 with a serially uncorrelated transitory component (Figure 3).
 
 ![The trend of the local level model with an AR(1) transitory component](fig_ar1.png)
 
@@ -217,11 +217,11 @@ $`\displaystyle \mathcal{N}\big(\tau_0\mathbf{1} + \mathbf{V}(\mathbf{V} + \bold
 where $`\boldsymbol{\Sigma}`$ is the covariance matrix of $`\boldsymbol{\varepsilon}`$. `guide.py`
 computes it with dense matrices and compares it with $`\mathbf{K}^{-1}\mathbf{c}`$ and
 $`\mathbf{K}^{-1}`$. They agree to within 1e-13 relative to their largest entries with a serially
-uncorrelated transitory component and to within 3e-14 with an AR(1) one. The means of the 5,000
-draws lie within 0.04 posterior standard deviations of the posterior mean, and their variances
-between 0.94 and 1.06 times the posterior variances. In this realization, the 90 percent intervals
-contain the true trend in 193 of the 200 periods with a serially uncorrelated transitory
-component and in 193 with an AR(1) transitory component; one realization illustrates the
+uncorrelated transitory component and to within 5e-14 with an AR(1) one. The means of the 5,000
+draws lie within 0.03 posterior standard deviations of the posterior mean, and their variances
+between 0.93 and 1.04 times the posterior variances. In this realization, the 90 percent intervals
+contain the true trend in 183 of the 200 periods with a serially uncorrelated transitory
+component and in 200 with an AR(1) transitory component; one realization illustrates the
 intervals and does not check their coverage.
 
 </details>
@@ -244,7 +244,7 @@ K = H.T @ H / omega2 + sp.diags_array(1 / sig2t)         # sig2t: the T variance
 c = H.T @ tau0_vec / omega2 + y / sig2t
 ```
 
-`guide.py` checks this answer against dense algebra; they agree to within 2e-14. A stochastic
+`guide.py` checks this answer against dense algebra; they agree to within 1e-14. A stochastic
 volatility model makes the same update at every iteration of its sampler, with
 $`\sigma_t^2 = \mathrm{e}^{h_t}`$ at the current draw of the log-volatility $`h_t`$.
 

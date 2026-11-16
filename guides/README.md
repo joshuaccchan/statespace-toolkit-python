@@ -8,6 +8,38 @@ before. They are the Python versions of the
 
 ## Getting Started with the Precision Sampler
 
+The three guides use the local level model on the same generated data.
+
 | Guide | What it shows | Core functions |
 |---|---|---|
 | [How to Draw the States of an Unobserved Components Model](uc_states/) | Draw the whole path of the states at once with the precision sampler | `ssm.simulate_states`, `ssm.diffmat` |
+| [How to Estimate a State Space Model by Gibbs Sampling](gibbs_sampler/) | Draw the parameters and the states in turn, and check the chain | `ssm.simulate_states`, `ssm.diffmat`, `ssm.inefficiency_factor` |
+| [How to Compute the Integrated Likelihood of a State Space Model](integrated_likelihood/) | Integrate the states out of the likelihood, and draw the parameters without them | `ssm.intlike`, `ssm.simulate_states`, `ssm.inefficiency_factor` |
+
+## Time-Varying Parameters
+
+The three guides use a regression whose coefficients follow random walks, on generated data.
+
+| Guide | What it shows | Core functions |
+|---|---|---|
+| [How to Draw Time-Varying Regression Coefficients](tvp_states/) | Stack the regression over time and draw the whole path of the coefficients at once | `ssm.simulate_states`, `ssm.surform`, `ssm.diffmat` |
+| [How to Estimate a TVP Regression by Gibbs Sampling](tvp_gibbs/) | Draw the variances and the initial coefficients along with the coefficients, and check the chain | `ssm.simulate_states`, `ssm.surform`, `ssm.inefficiency_factor` |
+| [How to Tell Whether a Coefficient Varies over Time](tvp_compare/) | Compare models whose coefficients vary or stay constant by their marginal likelihoods | `ssm.intlike`, `ssm.surform`, `ssm.diffmat` |
+
+## Stochastic Volatility
+
+The four guides use two stochastic volatility models, one with Gaussian errors and one with
+Student-t errors, on generated data. In both, the log-volatility follows a stationary AR(1)
+process.
+
+| Guide | What it shows | Core functions |
+|---|---|---|
+| [How to Draw the Log-Volatilities of a Stochastic Volatility Model](sv_states/) | Draw the whole path of the log-volatilities by the auxiliary mixture sampler, and from their exact conditional distribution | `ssm.ksc_ar1_mean`, `ssm.simulate_states`, `ssm.armh` |
+| [How to Estimate a Stochastic Volatility Model by Gibbs Sampling](sv_gibbs/) | Draw the mean and the parameters of the log-volatility along with it, and check the chain | `ssm.ksc_ar1_mean`, `ssm.sv_params`, `ssm.inefficiency_factor`, `ssm.geweke` |
+| [How to Add Student-t Errors to a Stochastic Volatility Model](sv_t/) | Replace the Gaussian errors with Student-t errors, so that outliers have less effect on the estimated volatility | `ssm.ksc_ar1_mean`, `ssm.nu_studentt`, `ssm.sv_params` |
+| [How to Compare Stochastic Volatility Models by the Marginal Likelihood](sv_compare/) | Compare the two stochastic volatility models and a constant-variance model by their marginal likelihoods | `ssm.intlike_sv`, `ssm.intlike_sv_t` |
+
+The [examples](https://github.com/joshuaccchan/statespace-toolkit/tree/main/examples) of the
+MATLAB toolkit run the core functions on additional models, with real and generated data, and its
+[tutorials](https://github.com/joshuaccchan/statespace-toolkit/tree/main/tutorials) answer
+empirical questions with the models of published papers.
