@@ -142,7 +142,7 @@ print('\nSV with normal errors on the same data:')
 for i in range(4):
     print(f'{names[i]:<10} posterior mean {store_sv[:, i].mean():7.4f}, 90% interval '
           f'({qsv[0, i]:7.4f}, {qsv[1, i]:7.4f})')
-vt = np.exp(h_true / 2)                                 # the volatility of eps_t's scale
+vt = np.exp(h_true / 2)                                 # the scale e^{h_t/2}
 vm_t = np.exp(store_h / 2).mean(axis=1)
 vm_n = np.exp(store_hn / 2).mean(axis=1)
 bt = np.quantile(np.exp(store_h / 2), [.05, .95], axis=1, method='hazen').T
@@ -150,6 +150,13 @@ big = np.argsort(-lam_true, kind='stable')
 print(f'posterior mean of e^{{h_t/2}} against the truth: RMSE '
       f'{np.sqrt(np.mean((vm_t - vt)**2)):.3f} under SV-t, '
       f'{np.sqrt(np.mean((vm_n - vt)**2)):.3f} under SV')
+# the sd of y_t given h_t: e^{h_t/2} under SV, e^{h_t/2}*sqrt(nu/(nu - 2)) under SV-t
+st = vt * np.sqrt(nu_true / (nu_true - 2))
+nu10 = store_theta[9::10, 4]                            # nu at the stored draws of h
+sm_t = (np.exp(store_h / 2) * np.sqrt(nu10 / (nu10 - 2))).mean(axis=1)
+print(f'posterior mean of the sd of y_t given h_t against the truth: RMSE '
+      f'{np.sqrt(np.mean((sm_t - st)**2)):.3f} under SV-t, '
+      f'{np.sqrt(np.mean((vm_n - st)**2)):.3f} under SV')
 print(f'SV-t: 90% intervals contain the true e^{{h_t/2}} in '
       f'{np.sum((vt >= bt[:, 0]) & (vt <= bt[:, 1]))} of {T} periods')
 print('the five largest lambda_t:')
@@ -157,7 +164,7 @@ for k in big[:5]:                                       # the period t is k + 1
     print(f'  period {k + 1:4d}: lambda_t {lam_true[k]:6.2f}, posterior mean {store_lam[k]:5.2f}; '
           f'|eps_t| {abs(epsn[k]):.2f}, |sqrt(lambda_t)*eps_t| '
           f'{abs(np.sqrt(lam_true[k]) * epsn[k]):.2f}; e^{{h_t/2}} true {vt[k]:.2f}, '
-          f'SV-t {vm_t[k]:.2f}, SV {vm_n[k]:.2f}')
+          f'SV-t {vm_t[k]:.2f}, SV {vm_n[k]:.2f}; sd true {st[k]:.2f}, SV-t {sm_t[k]:.2f}')
 
 # ---- 3. the check: the sampler of Chan and Grant (2016), with the exact conditional of h ----
 nsim_x = 10000
