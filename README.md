@@ -6,8 +6,9 @@ Bayesian state space models. It is built around the precision sampler of Chan an
 components, time-varying parameter and stochastic volatility models. This repository is its
 Python version: the same functions under the same names, each tested against its MATLAB twin.
 
-It covers 26 of the 31 core functions so far, all but the five model functions, and the first
-how-to guide. [PARITY.md](PARITY.md) lists the functions and how each is checked.
+It covers 26 of the 31 core functions so far, all but the five model functions, and the ten
+[how-to guides](guides/) of the MATLAB toolkit. [PARITY.md](PARITY.md) lists the functions and
+how each is checked.
 
 ## Installation
 
@@ -37,6 +38,12 @@ draws, tauhat, C = ssm.simulate_states(K, y / sig2, 1000, rng=rng)
 ```
 
 [How to Draw the States of an Unobserved Components Model](guides/uc_states/) explains each line.
+
+## Citing
+
+[`CITATION.cff`](CITATION.cff) gives the citation of this package, and
+[`CITING.md`](https://github.com/joshuaccchan/statespace-toolkit/blob/main/CITING.md) of the
+MATLAB toolkit lists the paper behind each function.
 
 ## License
 
