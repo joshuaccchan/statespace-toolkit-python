@@ -29,6 +29,9 @@ def ksc_rw_noncentered(Ystar, htilde, h0, omegah, b0, Vh0, Vh, Vomegah, rng=None
       2018). rng is None, an integer seed, a numpy.random.Generator or a ssm.Stream. Random
       numbers per call: rand(T), randn(T), randn(2), rand.
 
+    When all seven mixture densities of a period underflow, its indicator probabilities are
+    computed in logs.
+
     See:
     Chan, J.C.C. (2027). Bayesian Macroeconometrics: Methods and Applications, Chapman &
     Hall/CRC, Section 10.1.1.
@@ -50,6 +53,11 @@ def ksc_rw_noncentered(Ystar, htilde, h0, omegah, b0, Vh0, Vh, Vomegah, rng=None
     sd = np.sqrt(SIG2_N)
     q = P_N * (np.exp(-0.5 * ((Ystar[:, None] - ((h0 + omegah * htilde)[:, None] + M_N)) / sd)**2)
                / (np.sqrt(2 * np.pi) * sd))
+    bad = ~(q.sum(axis=1) > 0)           # all seven densities underflow: weigh them in logs
+    if bad.any():
+        e = Ystar[bad, None] - ((h0 + omegah * htilde)[bad, None] + M_N)
+        lq = np.log(P_N) - np.log(sd) - 0.5 * (e / sd)**2
+        q[bad] = np.exp(lq - lq.max(axis=1, keepdims=True))
     q = q / q.sum(axis=1, keepdims=True)
     S = 7 - np.sum(temprand[:, None] < np.cumsum(q, axis=1), axis=1)
 

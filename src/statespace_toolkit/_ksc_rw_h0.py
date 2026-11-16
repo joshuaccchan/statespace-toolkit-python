@@ -24,6 +24,9 @@ def ksc_rw_h0(Ystar, h, sig, h0, rng=None):
     Code-identical to bvar_toolkit.sv.ksc_rw_h0 of the Python bvar-toolkit, and the two must stay
     so.
 
+    When all seven mixture densities of a period underflow, its indicator probabilities are
+    computed in logs.
+
     See:
     Chan, J.C.C. (2027). Bayesian Macroeconometrics: Methods and Applications, Chapman &
     Hall/CRC, Section 10.1.1.

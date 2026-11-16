@@ -18,7 +18,9 @@ factor of the precision samplers with the dense Cholesky factor, `ssm.intlike` w
 filter, `ssm.intlike_sv` and `ssm.intlike_sv_t` with the exact likelihood by quadrature at
 T = 2, `ssm.restrict` with dense Gaussian conditioning, and `ssm.armh` with a Gaussian target,
 whose draws it must reproduce. A chain of `ssm.ma_params` must match the conditional density of
-psi on a grid.
+psi on a grid. One update of `ssm.armh` or `ssm.nu_studentt`, applied to exact draws from its
+target, must leave their distribution unchanged. `ssm.tnormrnd` and the KSC samplers must give
+finite draws far in the tails.
 
 Of 38 one-line changes to the functions and to their factor, most by 1e-9, the tests catch 34.
 Three of the four they miss change terms too small to move the output beyond the tolerance; a
@@ -81,7 +83,9 @@ Not yet ported: the five `ssm.models` functions.
   enter every period, as constant coefficients do, it keeps the band of the leading block and
   the trailing rows dense, which gives the factor of MATLAB's sparse `chol`. `ssm.restrict`
   takes either. The band comes from the nonzero values of K, so a zero that SciPy stores
-  explicitly does not widen it.
+  explicitly does not widen it. It checks that K is square, that c has one entry per row of K
+  and that ndraws is not negative; these checks and their messages are Python's. Zero draws
+  give an n x 0 array.
 - `ssm.midas_basis` takes dates as numpy datetime64 values or as numbers of days.
 
 ## Guides

@@ -38,11 +38,21 @@ def simulate_states(K, c, ndraws=None, rng=None):
     Numerical Optimisation, 1(1/2): 101-120, Algorithm 1.
     """
     r = as_rng(rng)
+    c = np.asarray(c, dtype=float).ravel()
+    shape = K.shape if hasattr(K, 'shape') else np.shape(K)
+    if len(shape) != 2 or shape[0] != shape[1]:
+        raise ValueError('K must be a square matrix')
+    if c.size != shape[0]:
+        raise ValueError('c must have one entry per row of K')
+    if ndraws is not None and int(ndraws) < 0:
+        raise ValueError('ndraws must be a nonnegative integer')
     C = chol(K)
-    alphahat = C.solve_t(C.solve(np.asarray(c, dtype=float).ravel()))
+    alphahat = C.solve_t(C.solve(c))
     n = alphahat.size
     if ndraws is None:
         alpha = alphahat + C.solve_t(r.randn(n))
+    elif int(ndraws) == 0:                    # no draws: no solve with an empty right-hand side
+        alpha = np.zeros((n, 0))
     else:
         alpha = alphahat[:, None] + C.solve_t(r.randn(n, int(ndraws)))
     return alpha, alphahat, C
